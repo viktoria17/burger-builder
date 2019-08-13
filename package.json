@@ -92,6 +92,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "prettier": "1.18.2",
     "prop-types": "^15.7.2"
   }
 }
