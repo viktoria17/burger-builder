@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import Aux from '../../hoc/Aux';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES = {
 	salad: 0.5,
@@ -19,7 +21,29 @@ class BurgerBuilder extends Component {
 			cheese: 0,
 			meat: 0
 		},
-		totalPrice: 4
+		totalPrice: 4,
+		purchasable: false,
+		ordering: false
+	};
+
+	updateOrderingState = () => {
+		this.setState({
+			ordering: true
+		});
+	};
+
+	closeOrderingState = () => {
+		this.setState({
+			ordering: false
+		});
+	};
+
+	updatePurchaseState = (ingredients) => {
+		const isPurchasable = Object.values(ingredients).some((value) => value > 0);
+
+		this.setState({
+			purchasable: isPurchasable
+		});
 	};
 
 	addIngredientHandler = (type) => {
@@ -39,6 +63,8 @@ class BurgerBuilder extends Component {
 			ingredients: addedIngredients,
 			totalPrice: totalBurgerPrice
 		});
+
+		this.updatePurchaseState(addedIngredients);
 	};
 
 	removeIngredientHandler = (type) => {
@@ -63,6 +89,8 @@ class BurgerBuilder extends Component {
 			ingredients: addedIngredients,
 			totalPrice: totalBurgerPrice
 		});
+
+		this.updatePurchaseState(addedIngredients);
 	};
 
 	render() {
@@ -70,18 +98,23 @@ class BurgerBuilder extends Component {
 			...this.state.ingredients
 		};
 
-		for (const key in disabledInfo) {
-			disabledInfo[key] = disabledInfo[key] <= 0;
+		for (const ingredient in disabledInfo) {
+			disabledInfo[ingredient] = disabledInfo[ingredient] <= 0;
 		}
 
 		return (
 			<Aux>
+				<Modal show={this.state.ordering} modalClosed={this.closeOrderingState}>
+					<OrderSummary ingredients={this.state.ingredients} />
+				</Modal>
 				<Burger ingredients={this.state.ingredients} />
 				<BuildControls
 					ingredientAdded={this.addIngredientHandler}
 					ingredientRemoved={this.removeIngredientHandler}
 					disableButton={disabledInfo}
 					burgerPrice={this.state.totalPrice}
+					isPurchasable={this.state.purchasable}
+					isOrdering={this.updateOrderingState}
 				/>
 			</Aux>
 		);
