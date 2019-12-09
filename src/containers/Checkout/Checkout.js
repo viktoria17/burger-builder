@@ -11,8 +11,20 @@ class Checkout extends Component {
 		}
 	};
 
+	checkoutCanceledHandler = () => {
+		this.props.history.goBack();
+	};
+
+	checkoutContinuedHandler = () => {
+		this.props.history.replace('/checkout/contact-data')
+	};
+
 	render() {
-		return <CheckoutSummary ingredients={this.state.ingredients} />;
+		return <CheckoutSummary
+			ingredients={this.state.ingredients}
+			checkoutCanceled={this.checkoutCanceledHandler}
+			checkoutContinued={this.checkoutContinuedHandler}
+		/>;
 	}
 }
 
