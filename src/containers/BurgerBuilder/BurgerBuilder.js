@@ -53,37 +53,38 @@ class BurgerBuilder extends Component {
 	};
 
 	continueOrderHandler = () => {
-		this.setState({
-			loading: true
-		});
-
-		const order = {
-			ingredients: this.state.ingredients,
-			price: this.state.totalPrice,
-			customer: {
-				name: 'Vika',
-				address: {
-					city: 'Tallinn',
-					country: 'Estonia',
-				},
-				email: 'viktoria@test.com'
-			}
-		};
-
-		axios.post('/orders.json', order)
-			.then(res => {
-				this.setState({
-					loading: false,
-					// to close the modal
-					ordering: false
-				});
-			})
-			.catch(err => {
-				this.setState({
-					loading: false,
-					ordering: false
-				});
-			})
+		this.props.history.push('/checkout')
+		// this.setState({
+		// 	loading: true
+		// });
+		//
+		// const order = {
+		// 	ingredients: this.state.ingredients,
+		// 	price: this.state.totalPrice,
+		// 	customer: {
+		// 		name: 'Vika',
+		// 		address: {
+		// 			city: 'Tallinn',
+		// 			country: 'Estonia',
+		// 		},
+		// 		email: 'viktoria@test.com'
+		// 	}
+		// };
+		//
+		// axios.post('/orders.json', order)
+		// 	.then(res => {
+		// 		this.setState({
+		// 			loading: false,
+		// 			// to close the modal
+		// 			ordering: false
+		// 		});
+		// 	})
+		// 	.catch(err => {
+		// 		this.setState({
+		// 			loading: false,
+		// 			ordering: false
+		// 		});
+		// 	})
 	};
 
 	updatePurchaseState = (ingredients) => {
@@ -185,7 +186,7 @@ class BurgerBuilder extends Component {
 		return (
 			<Aux>
 				<Modal show={this.state.ordering} modalClosed={this.cancelOrderingState}>
-					{orderSummary}
+					{ orderSummary }
 				</Modal>
 				{ burger }
 			</Aux>
